@@ -11,5 +11,8 @@ describe('reactive', ()=>{
 
         expect(isReactive(observed)).toBe(true)
         expect(isReactive(original)).toBe(false)
+
+        expect(isReactive(observed)).toBe(true)
+
     });
 })

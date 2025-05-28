@@ -1,5 +1,8 @@
 import { extend } from "../shared";
 
+let activateEffect;
+let shouldTrack;
+
 class ReactiveEffect {
     _fn: Function;
     deps: any[];
@@ -11,8 +14,18 @@ class ReactiveEffect {
         this.active = true
     }
     run() {
+
+        if (!this.active) {
+            return this._fn()
+        }
+        
+        shouldTrack = true
         activateEffect = this
-        return this._fn()
+        const res = this._fn()
+        shouldTrack = false
+
+        return res
+
     }
     stop() {
         if (this.active) {
@@ -32,9 +45,8 @@ function cleanupEffect(effect){
     });
 }
 
-let activateEffect;
-export function effect(fn, options:any={}) {
 
+export function effect(fn, options:any={}) {
 
     const _effect = new ReactiveEffect(fn)
 
@@ -50,6 +62,8 @@ export function effect(fn, options:any={}) {
 
 const targetMap = new Map();
 export function track(target, key) { // collect dependencies
+    if (!isTracking() ) return
+    
     let depsMap = targetMap.get(target)
     if(!depsMap) {
         depsMap = new Map()
@@ -62,11 +76,14 @@ export function track(target, key) { // collect dependencies
         depsMap.set(key, dep)
     }
 
-    if (activateEffect) {
-        dep.add(activateEffect)
-        activateEffect.deps.push(dep)
-    }
+    if (dep.has(activateEffect)) return;
+    dep.add(activateEffect)
+    activateEffect.deps.push(dep)
 
+}
+
+function isTracking() {
+    return shouldTrack && activateEffect!==undefined
 }
 
 export function trigger(target, key) {

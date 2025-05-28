@@ -1,5 +1,5 @@
 import { effect } from "../effect";
-import { reactive } from "../reactive";
+import { isReactive, reactive } from "../reactive";
 import { stop } from "../effect";
 
 describe('effect', ()=>{
@@ -92,6 +92,19 @@ describe('effect', ()=>{
         )
         stop(runner)
         expect(onStop).toHaveBeenCalledTimes(1)
+    });
+
+    it('nested reactive', () => {
+        const origin = {
+            nested: {
+                foo: 1
+            },
+            array:[{ bar: 2 }]
+        }
+        const observed = reactive(origin)
+        expect(isReactive(observed.nested)).toBe(true)
+        expect(isReactive(observed.array)).toBe(true)
+        expect(isReactive(observed.array[0])).toBe(true)
     });
 
 })

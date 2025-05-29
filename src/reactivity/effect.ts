@@ -76,19 +76,26 @@ export function track(target, key) { // collect dependencies
         depsMap.set(key, dep)
     }
 
+    trackEffects(dep)
+}
+
+export function trackEffects(dep) {
     if (dep.has(activateEffect)) return;
     dep.add(activateEffect)
     activateEffect.deps.push(dep)
-
 }
 
-function isTracking() {
+export function isTracking() {
     return shouldTrack && activateEffect!==undefined
 }
 
 export function trigger(target, key) {
-    const deps = targetMap.get(target).get(key)
-    for (const effect of deps) {
+    const dep = targetMap.get(target).get(key)
+    triggerEffect(dep)
+}
+
+export function triggerEffect(dep) {
+    for (const effect of dep) {
         if (effect.scheduler) {
             effect.scheduler()
         }else {
@@ -96,6 +103,7 @@ export function trigger(target, key) {
         }
     }
 }
+
 
 export function stop(runner) { // 从依赖中找到这个函数, 然后将其删除
     runner.effect.stop()

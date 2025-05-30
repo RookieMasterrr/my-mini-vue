@@ -2,7 +2,7 @@ import { hasChanged, isObject } from "../shared";
 import { isTracking, trackEffects, triggerEffect } from "./effect";
 import { reactive } from "./reactive";
 
-class refImpl {
+export class refImpl {
     private _value: any;
     public dep
     private _rawValue: any;

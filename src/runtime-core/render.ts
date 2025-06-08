@@ -29,16 +29,28 @@ function mountElement(vnode: any, container: any) {
 
     const { children } = vnode
 
-    el.textContent = children
-
+    
+    if (typeof children === 'string') {
+        el.textContent = children
+    }else if(Array.isArray(children)) {
+        mountChildren(vnode, el)
+    }
+    
     const { props } = vnode
     for (const key in props) {
         const value = props[key]            
         el.setAttribute(key, value)
     }
-
+    
     container.append(el)
 }
+
+function mountChildren(vnode, container) {
+    vnode.children.forEach((v)=>{
+        patch(v, container)
+    })
+}
+
 
 function mountComponent(vnode, container) {
     const instance = createComponentInstance(vnode)

@@ -7,7 +7,7 @@ export function render(vnode, container) {
 
 function patch(vnode, container) {
     // 判断vnode是不是element, 判断是component还是vnode(element)
-
+    // 最重要的就是要区分出processElement和processComponent
     if(typeof vnode.type === 'string') {
         processElement(vnode, container)
     }else if(isObject(vnode.type)) {
@@ -46,11 +46,9 @@ function mountComponent(vnode, container) {
     setupComponent(instance)
     setupRenderEffect(instance, container)
 }
+
 function setupRenderEffect(instance, container) {
     const subTree = instance.render()
 
     patch(subTree, container)
 }
-
-
-

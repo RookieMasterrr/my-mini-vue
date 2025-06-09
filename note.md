@@ -26,4 +26,9 @@ DOM 引用	            el 指向真实 DOM，或 $el
 就是App.js
 
 
+
 h函数返回虚拟节点vnode
+
+
+
+Vue 3 中的 ShapeFlags 是一个使用二进制位标志（bit flag）来描述虚拟节点（VNode）类型和子节点类型的枚举值，主要用于快速判断和优化虚拟节点的处理逻辑

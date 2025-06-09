@@ -1,4 +1,5 @@
 import { h } from "../../lib/guide-mini-vue.esm.js"
+import { Foo } from "./Foo.js"
 
 export const App = {
     render() {
@@ -14,7 +15,14 @@ export const App = {
                     console.log('mousedown')
                 }
             },
-            [h("p", { class: "red" }, 'hi'), h("p", { class: "blue" }, this.msg)]
+            [
+                h('div', {}, 'hi,'+this.msg), 
+                h(Foo, {
+                    count:1
+                })
+                // 这里的Foo就是子组件
+            ]
+            // [h("p", { class: "red" }, 'hi'), h("p", { class: "blue" }, this.msg)]
         )
     },
     setup() {

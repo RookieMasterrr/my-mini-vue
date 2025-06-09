@@ -6,7 +6,7 @@ export function render(vnode, container) {
 }
 
 function patch(vnode, container) {
-    // 判断vnode是不是element, 判断是component还是vnode(element)
+    // 判断vnode是元素的vnode, 还是组件vnode
     // 最重要的就是要区分出processElement和processComponent
     if(typeof vnode.type === 'string') {
         processElement(vnode, container)
@@ -25,11 +25,10 @@ function processComponent(vnode, container) {
 }
 
 function mountElement(vnode: any, container: any) {
-    const el = document.createElement(vnode.type)
+    const el = vnode.el = document.createElement(vnode.type)
 
     const { children } = vnode
 
-    
     if (typeof children === 'string') {
         el.textContent = children
     }else if(Array.isArray(children)) {
@@ -52,15 +51,16 @@ function mountChildren(vnode, container) {
 }
 
 
-function mountComponent(vnode, container) {
-    const instance = createComponentInstance(vnode)
+function mountComponent(initialVnode, container) {
+    const instance = createComponentInstance(initialVnode)
 
     setupComponent(instance)
-    setupRenderEffect(instance, container)
+    setupRenderEffect(instance, initialVnode, container)
 }
 
-function setupRenderEffect(instance, container) {
-    const subTree = instance.render()
-
+function setupRenderEffect(instance, initialVnode, container) {
+    const { proxy } = instance
+    const subTree = instance.render.call(proxy)
     patch(subTree, container)
+    initialVnode.el = subTree.el
 }

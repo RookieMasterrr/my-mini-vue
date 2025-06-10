@@ -47,9 +47,7 @@ function mountElement(vnode: any, container: any) {
         }else {
             el.setAttribute(key, value)
         }
-        
     }
-    
     container.append(el)
 }
 

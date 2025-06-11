@@ -1,7 +1,7 @@
 import { camelize, toHandlerKey } from "../shared/index"
 
 export function emit(instance, event, ...args) {
-    
+
     const { props } = instance
 
 
@@ -11,7 +11,7 @@ export function emit(instance, event, ...args) {
     const handlerName = toHandlerKey(camelize(event))
 
     const handler = props[handlerName]
-    if(handler) {
+    if (handler) {
         handler(...args)
     }
 }

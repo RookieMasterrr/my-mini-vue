@@ -8,10 +8,10 @@ export function createComponentInstance(vnode) {
     const component = {
         vnode,
         type: vnode.type,
-        setupState:{},
+        setupState: {},
         props: {},
         slots: {},
-        emit:()=>{}
+        emit: () => { }
     }
 
     component.emit = emit.bind(null, component) as any
@@ -30,10 +30,10 @@ export function setupComponent(instance) {
 function setupStatefulComponent(instance: any) {
     const Component = instance.type
 
-    instance.proxy = new Proxy({_:instance}, PublicInstanceProxyHandlers)
+    instance.proxy = new Proxy({ _: instance }, PublicInstanceProxyHandlers)
 
     const { setup } = Component
-    if(setup) {
+    if (setup) {
         // setup第二个参数要传入{ emit }
         const setupResult = setup(shallowReadonly(instance.props), {
             emit: instance.emit
@@ -45,7 +45,7 @@ function setupStatefulComponent(instance: any) {
 function handleSetupResult(instance, setupResult: any) {
     // function object
     // TODO function
-    if(typeof setupResult === 'object') {
+    if (typeof setupResult === 'object') {
         instance.setupState = setupResult
     }
     finishComponentSetup(instance)

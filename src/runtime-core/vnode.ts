@@ -9,16 +9,16 @@ export function createVNode(type, props?, children?) {
         props,
         children,
         shapeFlag: getShapeFlag(type),
-        el:null
+        el: null
     }
 
     if (typeof vnode.children === 'string') {
         vnode.shapeFlag |= ShapeFlags.TEXT_CHILDREN
-    }else if(Array.isArray(vnode.children)) {
+    } else if (Array.isArray(vnode.children)) {
         vnode.shapeFlag |= ShapeFlags.ARRAY_CHILDREN
     }
 
-    if(vnode.shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
+    if (vnode.shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
         if (typeof children === 'object') {
             vnode.shapeFlag |= ShapeFlags.SLOT_CHILDREN
         }
@@ -28,7 +28,7 @@ export function createVNode(type, props?, children?) {
     return vnode
 }
 
-export function createTextVNode(text:string) {
+export function createTextVNode(text: string) {
     return createVNode(Text, {}, text)
 }
 

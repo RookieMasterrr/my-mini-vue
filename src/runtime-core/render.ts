@@ -1,6 +1,6 @@
 import { ShapeFlags } from "../shared/ShapeFlags"
 import { createComponentInstance, setupComponent } from "./component"
-import { Fragment,Text } from "./vnode"
+import { Fragment, Text } from "./vnode"
 
 export function render(vnode, container) {
     patch(vnode, container)
@@ -19,9 +19,9 @@ function patch(vnode, container) {
             processText(vnode, container)
             break;
         default:
-            if(shapeFlag & ShapeFlags.ELEMENT) {
+            if (shapeFlag & ShapeFlags.ELEMENT) {
                 processElement(vnode, container)
-            }else if(shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
+            } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
                 processComponent(vnode, container)
             }
             break;
@@ -41,7 +41,7 @@ function processFragment(vnode, container) {
 }
 
 function processText(vnode, container) {
-    const {children} = vnode
+    const { children } = vnode
     const textNode = vnode.el = document.createTextNode(children)
     container.append(textNode)
 }
@@ -54,18 +54,18 @@ function mountElement(vnode: any, container: any) {
 
     if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
         el.textContent = children
-    }else if(shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+    } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
         mountChildren(vnode, el)
     }
-    
+
     const { props } = vnode
     for (const key in props) {
         const value = props[key]
-        const isOn = (key:string) => /^on[A-Z]/.test(key)
+        const isOn = (key: string) => /^on[A-Z]/.test(key)
         if (isOn(key)) {
             const event = key.slice(2).toLocaleLowerCase()
             el.addEventListener(event, value)
-        }else {
+        } else {
             el.setAttribute(key, value)
         }
     }
@@ -73,7 +73,7 @@ function mountElement(vnode: any, container: any) {
 }
 
 function mountChildren(vnode, container) {
-    vnode.children.forEach((v)=>{
+    vnode.children.forEach((v) => {
         patch(v, container)
     })
 }

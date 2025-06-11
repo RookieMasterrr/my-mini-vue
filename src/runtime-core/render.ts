@@ -1,5 +1,6 @@
 import { ShapeFlags } from "../shared/ShapeFlags"
 import { createComponentInstance, setupComponent } from "./component"
+import { Fragment } from "./vnode"
 
 export function render(vnode, container) {
     patch(vnode, container)
@@ -8,13 +9,21 @@ export function render(vnode, container) {
 function patch(vnode, container) {
     // 判断vnode是元素的vnode, 还是组件vnode
     // 最重要的就是要区分出processElement和processComponent
-    const { shapeFlag } = vnode
-    if(shapeFlag & ShapeFlags.ELEMENT) {
-        processElement(vnode, container)
-    }else if(shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
-        processComponent(vnode, container)
-    }
+    const { type, shapeFlag } = vnode
 
+    switch (type) {
+        case Fragment:
+            processFragment(vnode, container)
+            break;
+    
+        default:
+            if(shapeFlag & ShapeFlags.ELEMENT) {
+                processElement(vnode, container)
+            }else if(shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
+                processComponent(vnode, container)
+            }
+            break;
+    }
 }
 
 function processElement(vnode: any, container: any) {
@@ -23,6 +32,10 @@ function processElement(vnode: any, container: any) {
 
 function processComponent(vnode, container) {
     mountComponent(vnode, container)
+}
+
+function processFragment(vnode, container) {
+    mountChildren(vnode, container)
 }
 
 function mountElement(vnode: any, container: any) {

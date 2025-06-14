@@ -7,6 +7,9 @@ export const App = {
             "div", 
             {
                 id: "root",
+                onClick() {
+                    console.log("click")
+                }
             }, 
             "hi, " + this.msg
             // [

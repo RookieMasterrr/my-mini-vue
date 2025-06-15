@@ -25,9 +25,7 @@ export function setupComponent(instance) {
 
 function setupStatefulComponent(instance) {
     const Component = instance.type
-
     instance.proxy = new Proxy({instance}, PublicInstanceProxyHandles)
-
     const { setup } = Component
 
     if(setup) {
@@ -36,7 +34,6 @@ function setupStatefulComponent(instance) {
         })
         handleSetupResult(instance, setupResult)
     }
-
 }
 function handleSetupResult(instance, setupResult) {
     // function / Object
@@ -44,7 +41,6 @@ function handleSetupResult(instance, setupResult) {
     if (typeof setupResult === 'object') {
         instance.setupState = setupResult
     }
-
     finishComponentSetup(instance)
 }
 
@@ -54,4 +50,3 @@ function finishComponentSetup(instance) {
         instance.render = Component.render
     }
 }
-

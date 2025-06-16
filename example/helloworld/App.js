@@ -1,5 +1,6 @@
 import { h } from "../../lib/guide-mini-vue.esm.js"
 import { Foo } from "./Foo.js"
+import { createTextVNode } from "../../lib/guide-mini-vue.esm.js"
 
 export const App = {
     name: "App",
@@ -16,7 +17,8 @@ export const App = {
             // "hi, " + this.msg
             [
                 h("div", {}, "hi, "+this.msg),
-                h(Foo, { count: 1 })
+                h(Foo, { count: 1 }),
+                createTextVNode("Hello, World")
             ]
         )
     },

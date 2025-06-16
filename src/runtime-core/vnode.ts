@@ -1,5 +1,7 @@
 import { ShapeFlags } from "../shared/ShapeFlags"
 
+export const Fragment = Symbol('Fragment')
+
 export function createVNode(type, props?, children?) {
     const vnode = {
         type, 
@@ -18,6 +20,8 @@ export function createVNode(type, props?, children?) {
     if((vnode.shapeFlag & ShapeFlags.STATEFUL_COMPONENT) && typeof children === 'object') {
         vnode.shapeFlag |= ShapeFlags.SLOT_CHILDREN
     }
+
+
 
 
     return vnode

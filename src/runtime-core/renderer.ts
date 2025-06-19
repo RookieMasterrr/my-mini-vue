@@ -76,10 +76,14 @@ export function createRender(options) {
     function patchChildren(n1, n2, container) {
         const prevShapeFlag = n1.shapeFlag
         const shapeFlag = n2.shapeFlag
+        const c1 = n1.children
         const c2 = n2.children
         if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
             if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
                 unmountChildren(n1.children)
+                hostSetElementText(container, c2)
+            }else if(prevShapeFlag & ShapeFlags.TEXT_CHILDREN) {
+                if(c1 === c2) return;
                 hostSetElementText(container, c2)
             }
         }

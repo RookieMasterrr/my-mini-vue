@@ -10,6 +10,8 @@ export function createRender(options) {
         createElement: hostCreateElement,
         patchProp: hostPatchProp,
         insert: hostInsert,
+        remove: hostRemove,
+        setElementText: hostSetElementText
     } = options
     
 
@@ -67,9 +69,29 @@ export function createRender(options) {
         const newProps = n2.props || {}
 
         const el = n2.el = n1.el
-
+        patchChildren(n1, n2, el)
         patchProps(el, oldProps, newProps)
     }
+
+    function patchChildren(n1, n2, container) {
+        const prevShapeFlag = n1.shapeFlag
+        const shapeFlag = n2.shapeFlag
+        const c2 = n2.children
+        if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
+            if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+                unmountChildren(n1.children)
+                hostSetElementText(container, c2)
+            }
+        }
+    }
+
+    function unmountChildren(children) {
+        for (const child of children) {
+            const el = child.el
+            hostRemove(el)
+        }
+    }
+
 
     function patchProps(el, oldProps, newProps) {
         if (oldProps === newProps) return;
